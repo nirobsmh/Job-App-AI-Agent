@@ -70,79 +70,99 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-white">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-white sm:items-start">
-        <div className="flex flex-col items-center gap-8 text-center sm:items-start sm:text-left">
-          <section className="flex flex-col gap-2">
-            <h1 className="text-2xl font-bold text-slate-900">
-              Job Application Research Agent
-            </h1>
-            <p className="text-slate-500">
-              Upload a resume PDF, paste a job description, and get a tailored
-              analysis.
-            </p>
-          </section>
-          <section className="flex flex-col gap-2">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="resume" className="text-slate-500">
+    <div className="flex flex-1 bg-slate-100">
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-8 lg:px-10">
+        <section className="mb-8 max-w-3xl">
+          <h1 className="text-3xl font-semibold tracking-tight text-slate-950">
+            Job Application Research Agent
+          </h1>
+          <p className="mt-3 text-sm leading-6 text-slate-600">
+            Upload a resume PDF and paste the job description on the left. The
+            AI-generated cover letter appears on the right.
+          </p>
+        </section>
+
+        <section className="grid flex-1 grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="flex flex-col gap-6 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex flex-col gap-3">
+              <label
+                htmlFor="resume"
+                className="text-sm font-medium text-slate-800"
+              >
                 Upload Resume
               </label>
-              <input
-                type="file"
-                accept="application/pdf"
-                id="resume"
-                name="resume"
-                className="border border-black rounded-md p-2 text-slate-500 cursor-pointer"
-                onChange={handleResumeChange}
-              />
+              <div className="flex min-h-36 items-center rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4">
+                <input
+                  type="file"
+                  accept="application/pdf"
+                  id="resume"
+                  name="resume"
+                  className="w-full cursor-pointer text-sm text-slate-600 file:mr-4 file:rounded-xl file:border-0 file:bg-slate-900 file:px-4 file:py-3 file:text-sm file:font-medium file:text-white"
+                  onChange={handleResumeChange}
+                />
+              </div>
+              <p className="text-xs text-slate-500">
+                {resumeFile ? `Selected: ${resumeFile.name}` : "PDF only"}
+              </p>
             </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="job-description" className="text-slate-500">
+
+            <div className="flex flex-1 flex-col gap-3">
+              <label
+                htmlFor="job-description"
+                className="text-sm font-medium text-slate-800"
+              >
                 Job Description
               </label>
               <textarea
                 id="job-description"
                 name="job-description"
-                className="border border-black rounded-md p-2 text-slate-500"
+                className="h-[420px] w-full resize-none rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm leading-6 text-slate-700 outline-none transition focus:border-slate-900 focus:ring-4 focus:ring-slate-200"
                 onChange={handleJobDescriptionChange}
+                value={jobDescription}
+                placeholder="Paste the full job description here."
               />
             </div>
-            <div className="flex justify-center">
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <button
-                className={`bg-blue-500 text-white rounded-md p-2 ${isAnalyzing ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+                className={`inline-flex h-12 items-center justify-center rounded-2xl px-6 text-sm font-medium text-white transition ${
+                  isAnalyzing
+                    ? "cursor-not-allowed bg-slate-400"
+                    : "cursor-pointer bg-slate-950 hover:bg-slate-800"
+                }`}
                 onClick={handleAnalyze}
                 disabled={isAnalyzing}
               >
-                {isAnalyzing ? "Analyzing..." : "Analyze"}
+                {isAnalyzing ? "Analyzing..." : "Generate Cover Letter"}
               </button>
+              {errorMessage ? (
+                <p className="text-sm text-red-600">{errorMessage}</p>
+              ) : null}
             </div>
-            {errorMessage ? (
-              <p className="text-sm text-red-600">{errorMessage}</p>
-            ) : null}
-          </section>
-          <section className="flex flex-col gap-2 w-full">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="cover-letter" className="text-slate-500">
-                Cover Letter
+          </div>
+
+          <div className="flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <label
+                htmlFor="cover-letter"
+                className="text-sm font-medium text-slate-800"
+              >
+                AI Generated Cover Letter
               </label>
-              <textarea
-                id="cover-letter"
-                name="cover-letter"
-                className="border border-black rounded-md p-2 text-slate-500"
-                readOnly
-                value={coverLetter}
-              />
+              <span className="text-xs text-slate-500">
+                Ready after analysis
+              </span>
             </div>
-            {
-              /* <button
-              className="bg-blue-500 text-white rounded-md p-2 cursor-pointer"
-              onClick={handleGenerateCoverLetter}
-            >
-              Generate Cover Letter
-            </button> */
-            }
-          </section>
-        </div>
+            <textarea
+              id="cover-letter"
+              name="cover-letter"
+              className="h-full min-h-[620px] w-full flex-1 resize-none rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 outline-none"
+              readOnly
+              value={coverLetter}
+              placeholder="Your tailored cover letter will appear here."
+            />
+          </div>
+        </section>
       </main>
     </div>
   );
