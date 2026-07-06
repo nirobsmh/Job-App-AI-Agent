@@ -69,6 +69,19 @@ export default function Home() {
     }
   };
 
+  const handleDownload = () => {
+    const blob = new Blob([coverLetter], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "cover_letter.txt";
+    a.click();
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(coverLetter);
+  };
+
   return (
     <div className="flex flex-1 bg-slate-100">
       <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col px-6 py-8 lg:px-10">
@@ -135,13 +148,13 @@ export default function Home() {
               >
                 {isAnalyzing ? "Analyzing..." : "Generate Cover Letter"}
               </button>
-              {errorMessage ? (
-                <p className="text-sm text-red-600">{errorMessage}</p>
-              ) : null}
+              {errorMessage
+                ? <p className="text-sm text-red-600">{errorMessage}</p>
+                : null}
             </div>
           </div>
 
-          <div className="flex flex-col rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="flex flex-col gap-3 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="mb-3 flex items-center justify-between gap-3">
               <label
                 htmlFor="cover-letter"
@@ -161,6 +174,20 @@ export default function Home() {
               value={coverLetter}
               placeholder="Your tailored cover letter will appear here."
             />
+            <div className="flex justify-end gap-3">
+              <button
+                className="inline-flex h-12 items-center justify-center rounded-2xl px-6 text-sm font-medium text-white transition cursor-pointer bg-slate-950 hover:bg-slate-800"
+                onClick={handleDownload}
+              >
+                Download Cover Letter
+              </button>
+              <button
+                className="inline-flex h-12 items-center justify-center rounded-2xl px-6 text-sm font-medium text-white transition cursor-pointer bg-slate-950 hover:bg-slate-800"
+                onClick={handleCopy}
+              >
+                Copy to Clipboard
+              </button>
+            </div>
           </div>
         </section>
       </main>
